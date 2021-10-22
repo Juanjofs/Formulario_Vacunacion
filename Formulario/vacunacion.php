@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VACUNACIÓN</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
     <body style="background-color:hsla(201, 88%, 87%, 0.76)">
@@ -34,8 +35,8 @@
                     <div class="row">
                         <div class="col-6"><p class="fw-bolder">Identificación:</p></div>
                         <div class="col-6"> <div class="form-floating mb-2">
-                                            <input type="text" class="form-control" name="txt_id" id="txt_id">
-                                            <label for="floatingInput">Documento</label>
+                                            <input type="text" class="form-control" name="txt_id" id="txt_id" required>
+                                            <label for="floatingInput" require>Documento</label>
                                             </div>
                         </div>
                     </div>
@@ -44,7 +45,7 @@
                     <div class="row">
                         <div class="col-6"><p class="fw-bolder">Nombres:</p></div> 
                         <div class="col-6"> <div class="form-floating mb-2">
-                                            <input type="text" class="form-control" name="txt_nombres" id="txt_nombres">
+                                            <input type="text" class="form-control" name="txt_nombres" id="txt_nombres" required>
                                             <label for="floatingInput">Nombres</label>
                                             </div>
                         </div>
@@ -54,7 +55,7 @@
                     <div class="row">
                         <div class="col-6"><p class="fw-bolder">Apellidos:</p></div>
                         <div class="col-6"> <div class="form-floating mb-2">
-                                            <input type="text" class="form-control" name="txt_apellido" id="txt_apellido" >
+                                            <input type="text" class="form-control" name="txt_apellido" id="txt_apellido" required>
                                             <label for="floatingInput">Apellidos</label>
                                             </div>
                         </div>
@@ -64,7 +65,7 @@
                     <div class="row">
                         <div class="col-6"><p class="fw-bolder">Tipo de Biológico:</p></div>
                         <div class="col-6"> <div class="form-floating mb-2">
-                                            <input type="text" class="form-control" name="txt_biologico" id="txt_biologico">
+                                            <input type="text" class="form-control" name="txt_biologico" id="txt_biologico" required>
                                             <label for="floatingInput">Laboratorio</label>
                                             </div>
                         </div>
@@ -73,13 +74,13 @@
                 <div class="container">
                     <div class="row">
                         <div class="col-6"><p class="fw-bolder">Fecha Primera Dósis:</p></div>
-                        <div class="col-6"><input type="date" name="txt_fp" id="txt_fp"> <br> </div>
+                        <div class="col-6"><input type="date" name="txt_fp" id="txt_fp" required> <br> </div>
                     </div>
                 </div>
                 <div class="container">
                     <div class="row">
                         <div class="col-6"><p class="fw-bolder">Fecha Segunda Dósis:</p></div>
-                        <div class="col-6"> <input type="date" name="txt_sd" id="txt_sd"> <br> </div>
+                        <div class="col-6"> <input type="date" name="txt_sd" id="txt_sd" required> <br> </div>
                     </div>
                 </div>
             </div>
@@ -103,7 +104,11 @@
         </div>
     </div>
     </form>
-    <?php
+    <br>
+</body>
+<?php
+    if(isset($_POST["txt_id"]))
+    {
         $txt_id = $_POST["txt_id"];
         $txt_nom = $_POST["txt_nombres"];
         $txt_ape = $_POST["txt_apellido"];
@@ -111,7 +116,7 @@
         $txt_fp = $_POST["txt_fp"];
         $txt_sd = $_POST["txt_sd"];
 
-        $fh = fopen("registro_vacunacion.txt",'a+');
+        $fh = fopen("registro_vacunacion.txt",'a');
         fwrite($fh, $txt_id.";".$txt_nom.";".$txt_ape.";".$txt_bio.";".$txt_fp.";".$txt_sd."\n");
         fclose($fh);
         echo "<div class='container'>";
@@ -132,17 +137,16 @@
                             echo "</tr>";
                         echo "</thead>";
                         echo "<tbody>";
-                        $fp = fopen("registro_vacunacion.txt", "r");
+                        $fp = fopen("registro_vacunacion.txt", 'r');
                         while(!feof($fp)) {
                             $linea = fgets($fp);
                             $registro = explode(";", $linea);
                             echo "<tr>";
                                 echo "<th scope='row'>$registro[0]</th>";
-                                echo "<td>$registro[1]</td>";
-                                echo "<td>$registro[2]</td>";
-                                echo "<td>$registro[3]</td>";
-                                echo "<td>$registro[4]</td>";
-                                echo "<td>$registro[5]</td>";
+                                for($i=1; $i<count($registro); $i++)
+                                {
+                                    echo "<td>$registro[$i]</td>";                                
+                                }
                             echo "</tr>";            
                         }
                         fclose($fp);
@@ -154,8 +158,7 @@
                 echo "</div>";
             echo "</div>";
         echo "</div>";
-    ?>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-1BmE4kWBq78iYhFldvKuhfTAU6auU8tT94WrHftjDbrCEXSU1oBoqyl2QvZ6jIW3" crossorigin="anonymous">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
-</body>
+        
+    }
+?>
 </html>
